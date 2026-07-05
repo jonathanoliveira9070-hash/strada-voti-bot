@@ -4,7 +4,7 @@
   "description": "Strada - VOTI (Estoque): bot de controle de estoque via Telegram para carro de trabalho",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/copy-assets.js",
     "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
   },
