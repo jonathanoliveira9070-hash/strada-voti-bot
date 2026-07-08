@@ -25,6 +25,7 @@ export async function registrarMovimentacao(
     throw new Error(`Material ${input.materialId} não encontrado`);
   }
 
+  const quantidadeAtual = Number(material.quantidade_atual) || 0;
   const delta =
     input.tipo === 'entrada'
       ? input.quantidade
@@ -32,7 +33,7 @@ export async function registrarMovimentacao(
       ? -input.quantidade
       : input.quantidade; // ajuste: quantidade já é o delta
 
-  const novaQuantidade = material.quantidade_atual + delta;
+  const novaQuantidade = quantidadeAtual + delta;
   const materialAtualizado = await materiaisService.atualizarQuantidade(material.id, novaQuantidade);
 
   const result = await pool.query<Movimentacao>(
