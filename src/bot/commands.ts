@@ -8,7 +8,7 @@ import * as userService from '../services/userService';
 import { Usuario, Material } from '../types';
 
 function formatarMaterial(m: Material): string {
-  return • ${m.nome}: ${m.quantidade_atual} ${m.unidade};
+  return `• ${m.nome}: ${m.quantidade_atual} ${m.unidade}`;
 }
 
 export function registrarComandos(
@@ -25,11 +25,11 @@ export function registrarComandos(
 
     ctx.reply(
       [
-        '📦 Status do estoque — Strada VOTI',
-        Total de materiais cadastrados: ${materiais.length},
-        Itens abaixo do mínimo: ${abaixoDoMinimo.length},
-        Ferramentas emprestadas: ${emprestadas.length},
-        Ferramentas perdidas: ${perdidas.length},
+        '📦 *Status do estoque — Strada VOTI*',
+        `Total de materiais cadastrados: ${materiais.length}`,
+        `Itens abaixo do mínimo: ${abaixoDoMinimo.length}`,
+        `Ferramentas emprestadas: ${emprestadas.length}`,
+        `Ferramentas perdidas: ${perdidas.length}`,
       ].join('\n'),
       { parse_mode: 'Markdown' }
     );
@@ -54,7 +54,7 @@ export function registrarComandos(
       if (b[0] === 'Sem categoria') return -1;
       return a[0].localeCompare(b[0]);
     });
-    const texto = entradas.map(([cat, linhas]) => *${cat}*\n${linhas.join('\n')}).join('\n\n');
+    const texto = entradas.map(([cat, linhas]) => `*${cat}*\n${linhas.join('\n')}`).join('\n\n');
     ctx.reply(texto, { parse_mode: 'Markdown' });
   });
 
@@ -77,7 +77,7 @@ export function registrarComandos(
       .map((h) => {
         const sinal = h.tipo === 'entrada' ? '+' : h.tipo === 'saida' ? '-' : '±';
         const quem = h.cliente_ou_fornecedor ? ` (${h.cliente_ou_fornecedor})` : '';
-        return ${h.criado_em}\n${sinal}${h.quantidade} ${h.material_nome}${quem};
+        return `${h.criado_em}\n${sinal}${h.quantidade} ${h.material_nome}${quem}`;
       })
       .join('\n\n');
 
@@ -97,7 +97,7 @@ export function registrarComandos(
       perdida: '❌',
     };
     const texto = ferramentas
-      .map((f) => ${emojiStatus[f.status]} ${f.nome}${f.emprestada_para ? ` — com ${f.emprestada_para} : ''}`)
+      .map((f) => `${emojiStatus[f.status]} ${f.nome}${f.emprestada_para ? ` — com ${f.emprestada_para}` : ''}`)
       .join('\n');
     ctx.reply(texto);
   });
@@ -118,14 +118,14 @@ export function registrarComandos(
       ctx.reply(
         [
           'Para definir a categoria de um material, use:',
-          '/categoria Nome do item | Nome da categoria',
+          '`/categoria Nome do item | Nome da categoria`',
           '',
           'Exemplos:',
-          '/categoria BAP2 | Conectores',
-          '/categoria Cordão Óptico UPC | Cordões Ópticos',
+          '`/categoria BAP2 | Conectores`',
+          '`/categoria Cordão Óptico UPC | Cordões Ópticos`',
           '',
           'Também dá para categorizar vários itens de uma vez, separando por vírgula antes do "|":',
-          '/categoria Splitter 1X2, Splitter 1X8 | Splitters',
+          '`/categoria Splitter 1X2, Splitter 1X8 | Splitters`',
         ].join('\n'),
         { parse_mode: 'Markdown' }
       );
@@ -136,7 +136,7 @@ export function registrarComandos(
     const nomesItens = itensTexto.split(',').map((s) => s.trim()).filter(Boolean);
 
     if (!categoria || nomesItens.length === 0) {
-      ctx.reply('Não entendi o formato. Use: /categoria Nome do item | Nome da categoria', {
+      ctx.reply('Não entendi o formato. Use: `/categoria Nome do item | Nome da categoria`', {
         parse_mode: 'Markdown',
       });
       return;
@@ -157,10 +157,10 @@ export function registrarComandos(
 
     const partes: string[] = [];
     if (atualizados.length > 0) {
-      partes.push(✅ Categoria "${categoria}" definida para: ${atualizados.join(', ')});
+      partes.push(`✅ Categoria "${categoria}" definida para: ${atualizados.join(', ')}`);
     }
     if (naoEncontrados.length > 0) {
-      partes.push(⚠️ Não encontrei: ${naoEncontrados.join(', ')});
+      partes.push(`⚠️ Não encontrei: ${naoEncontrados.join(', ')}`);
     }
     ctx.reply(partes.join('\n\n'));
   });
